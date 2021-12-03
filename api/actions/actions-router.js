@@ -16,4 +16,25 @@ router.get('/', (req, res) => {
         })
 })
 
+router.get('/:id', (req, res) => {
+    const { id } = req.params
+    Actions.get(id)
+        .then(action => {
+            if (!action) {
+                res.status(404).json({
+                    message: 'The action with the specified id does not exist'
+                })
+            }
+            else {
+                res.status(200).json(action)
+            }
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({
+                message: 'Error retrieving action'
+            })
+        })
+})
+
 module.exports = router;
