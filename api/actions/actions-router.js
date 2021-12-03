@@ -1,4 +1,5 @@
 const express = require('express');
+const { validateActionId } = require('./actions-middlware')
 const Actions = require('./actions-model')
 
 const router = express.Router();
@@ -41,7 +42,7 @@ router.post('/', (req, res) => {
     const newAction = req.body
     if (!newAction.project_id || !newAction.description || !newAction.notes) {
         res.status(400).json({
-            message: 'Please provide a description and notes'
+            message: 'Please provide a project id, description, and notes'
         })
     }
     else {
@@ -55,6 +56,18 @@ router.post('/', (req, res) => {
                     message: 'Error adding action'
             })
             })
+    }
+})
+
+
+
+router.delete('/:id', validateActionId, async (req, res, next) => {
+    try {
+        await Actions.remove(req.params.id)
+        res.json(req.actions)
+    }
+    catch (err) {
+        next(err)
     }
 })
 
