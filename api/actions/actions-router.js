@@ -37,4 +37,25 @@ router.get('/:id', (req, res) => {
         })
 })
 
+router.post('/', (req, res) => {
+    const newAction = req.body
+    if (!newAction.project_id || !newAction.description || !newAction.notes) {
+        res.status(400).json({
+            message: 'Please provide a description and notes'
+        })
+    }
+    else {
+        Actions.insert(newAction)
+            .then(() => {
+                res.status(201).json(newAction)
+            })
+            .catch(err => {
+                console.log(err)
+                res.status(500).json({
+                    message: 'Error adding action'
+            })
+            })
+    }
+})
+
 module.exports = router;
