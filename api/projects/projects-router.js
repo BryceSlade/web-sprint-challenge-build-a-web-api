@@ -59,14 +59,12 @@ router.post('/', (req, res) => {
     }
 })
 
-router.put('/:id', validateProjectId, validateProject, (req, res, next) => {
-    if (req.body.completed === undefined) {
+router.put("/:id", validateProjectId, validateProject, (req, res, next) => {
+    if(req.body.completed === undefined){
         next({
             status: 400,
-            message: 'The project with the specified id does not exist'
-        })
-    }
-    else {
+            message: 'Project ID does not exist'})
+    } else{
         Projects.update(req.params.id, req.body)
             .then(() => {
                 return Projects.get(req.params.id)
@@ -76,7 +74,7 @@ router.put('/:id', validateProjectId, validateProject, (req, res, next) => {
             })
             .catch(next)
     }
-});
+})
 
 router.delete('/:id', validateProjectId, async (req, res, next) => {
     try {
